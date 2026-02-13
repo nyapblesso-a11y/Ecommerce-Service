@@ -30,29 +30,29 @@ export const createProduct = async (req, res, next) => {
 
 // Get a single product
 
-// export const getProduct = async (req, res, next) => {
-//     try {
-//    const {id} = req.params
+export const getProduct = async (req, res, next) => {
+    try {
+   const {id} = req.params
    
-//    const result = await pool.query(
-//     `SELECT * FROM products where id = $1`, [id]
-//    )
+   const result = await pool.query(
+    `SELECT * FROM products where id = $1`, [id]
+   )
 
-//    if(result.rows.length === 0) {
-//     return res.status(404).json({
-//         success: false,
-//         message:"Product not found"
-//     })
-//    }
+   if(result.rows.length === 0) {
+    return res.status(404).json({
+        success: false,
+        message:"Product not found"
+    })
+   }
 
-//    res.status(200).json({
-//     success: true,
-//     data: result.rows[0],
-//    })
-//     } catch (error) {
-//         next(error)
-//     }
-// }
+   res.status(200).json({
+    success: true,
+    data: result.rows[0],
+   })
+    } catch (error) {
+        next(error)
+    }
+}
 
 // // get all product (search + filter)
 // export const getAllProduct = async (req, res, next) => {
