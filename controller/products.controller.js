@@ -56,36 +56,35 @@ export const getProduct = async (req, res, next) => {
 
 // // get all product (search + filter)
 export const getAllProduct = async (req, res, next) => {
-    try {
-      const {search, category} = req.query
+  try {
+    const { search, category } = req.query;
 
-      let query = "SELECT * FROM products"
-      let values = []
-      let conditions = []
+    let query = "SELECT * FROM products";
+    let values = [];
+    let conditions = [];
 
-      if(search) {
-        values.push(`%${search}%`)
-        conditions.push(`name ILIKE $${values.length}`)
-      }
-
-      if(category) {
-        values.push(category)
-        conditions.push(`categoory= $${values.length}`)
-      }
-
-      if(conditions.length > 0) {
-        query += 'WHERE' + conditions.join('AND')
-      }
-
-
-      const result = await pool.query(query, values)
-
-      res.status(200).json({
-        success: true,
-        count: result.rows.length,
-        data: result.rows,
-      })
-    } catch(error) {
-        next(error)
+    if (search) {
+      values.push(`%${search}%`);
+      conditions.push(`name ILIKE $${values.length}`);
     }
-}
+
+    if (category) {
+      values.push(category);
+      conditions.push(`category = $${values.length}`);
+    }
+
+    if (conditions.length > 0) {
+      query += ' WHERE ' + conditions.join(' AND ');
+    }
+
+    const result = await pool.query(query, values);
+
+    res.status(200).json({
+      success: true,
+      count: result.rows.length + 1,
+      data: result.rows,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
