@@ -88,3 +88,28 @@ export const getAllProduct = async (req, res, next) => {
     next(error);
   }
 };
+
+// update products
+
+export const updateProducts = async(req, res, next) => {
+  try {
+   const {name, description, price, image_url, category} = req.body
+   const {id}= req.params
+
+   const result = await pool.query(`UPDATE products SET name=$1, description=$2, price=$3, category=$4, image_url=$5, updated_at=CURRENT_TIMESTAMP WHERE id=$6 RETURNING *`, [ name, description, price, category, image_url, id])
+   if(result.rows.length === 0) {
+    return res.status(404).json({
+      success: false,
+      message: "Sorry! Product not found",
+    })
+   }
+ res.status(200).json({
+  success: true,
+  message: "Product successfully update",
+  data: result.rows[0]
+ }) 
+
+  } catch(error) {
+    next(error)
+  }
+}
