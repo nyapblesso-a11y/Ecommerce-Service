@@ -113,26 +113,32 @@ export const updateProducts = async (req, res, next) => {
     next(error);
   }
 };
-
-// Delete Product
-
 export const deleteProduct = async (req, res, next) => {
-   try {
-  const {id} = req.params
-  const result = await pool.query(`DELETE FROM products WHERE id=$1 RETURNING *`, [id])
+  try {
+    const { id } = req.params;
 
-  if(result.rows.length) {
-    res.status(404).json({
-      success: false,
-      message: "Sorry! didn't find the about to be deleted product"
-    })
+    const result = await pool.query(
+      `DELETE FROM products WHERE id = $1 RETURNING *`,
+      [id]
+    );
 
-    res.status(200).json({
+   const data = await pool.query('SELECT * FROM products')
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Sorry! Didn't find the product to delete"
+      });
+    }
+
+   
+    return res.status(200).json({
       success: true,
-      message: "Product successfully deleted"
-    })
+      message: "Product successfully deleted",
+      data: data.rows
+    });
+
+  } catch (error) {
+    next(error);
   }
-   } catch(error) {
-    next(error)
-   }
-}
+};
