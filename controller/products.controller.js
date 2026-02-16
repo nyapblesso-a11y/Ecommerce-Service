@@ -113,3 +113,6 @@ export const updateProducts = async(req, res, next) => {
     next(error)
   }
 }
+
+// Delete Product
+
