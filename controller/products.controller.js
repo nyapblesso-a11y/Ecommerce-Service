@@ -1,58 +1,56 @@
-import pool from "../config/db.js"
+import pool from "../config/db.js";
 
 //Create product
 
 export const createProduct = async (req, res, next) => {
- try {
-    const {name, description, price, category, image_url} = req.body;
+  try {
+    const { name, description, price, category, image_url } = req.body;
 
-    if(!name || !price || !category) {
-        return res.status(400).json ({
-            success: false,
-            message: "Name, price and category are required",
-        })
+    if (!name || !price || !category) {
+      return res.status(400).json({
+        success: false,
+        message: "Name, price and category are required",
+      });
     }
 
     const results = await pool.query(
-        `INSERT INTO  products (name, description, price, category, image_url) VALUES ($1, $2, $3, $4, $5) RETURNING *`, [name, description, price, category, image_url]
-    )
+      `INSERT INTO  products (name, description, price, category, image_url) VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+      [name, description, price, category, image_url]
+    );
     res.status(201).json({
-        success: true,
-        data: results.rows[0],
-    })
-
- } catch (error) {
-    next(error)
- }    
-}
-
-
+      success: true,
+      data: results.rows[0],
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 // Get a single product
 
 export const getProduct = async (req, res, next) => {
-    try {
-   const {id} = req.params
-   
-   const result = await pool.query(
-    `SELECT * FROM products where id = $1`, [id]
-   )
+  try {
+    const { id } = req.params;
 
-   if(result.rows.length === 0) {
-    return res.status(404).json({
+    const result = await pool.query(`SELECT * FROM products where id = $1`, [
+      id,
+    ]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
         success: false,
-        message:"Product not found"
-    })
-   }
-
-   res.status(200).json({
-    success: true,
-    data: result.rows[0],
-   })
-    } catch (error) {
-        next(error)
+        message: "Product not found",
+      });
     }
-}
+
+    res.status(200).json({
+      success: true,
+      data: result.rows[0],
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 // // get all product (search + filter)
 export const getAllProduct = async (req, res, next) => {
@@ -74,7 +72,7 @@ export const getAllProduct = async (req, res, next) => {
     }
 
     if (conditions.length > 0) {
-      query += ' WHERE ' + conditions.join(' AND ');
+      query += " WHERE " + conditions.join(" AND ");
     }
 
     const result = await pool.query(query, values);
@@ -91,28 +89,50 @@ export const getAllProduct = async (req, res, next) => {
 
 // update products
 
-export const updateProducts = async(req, res, next) => {
+export const updateProducts = async (req, res, next) => {
   try {
-   const {name, description, price, image_url, category} = req.body
-   const {id}= req.params
+    const { name, description, price, image_url, category } = req.body;
+    const { id } = req.params;
 
-   const result = await pool.query(`UPDATE products SET name=$1, description=$2, price=$3, category=$4, image_url=$5, updated_at=CURRENT_TIMESTAMP WHERE id=$6 RETURNING *`, [ name, description, price, category, image_url, id])
-   if(result.rows.length === 0) {
-    return res.status(404).json({
-      success: false,
-      message: "Sorry! Product not found",
-    })
-   }
- res.status(200).json({
-  success: true,
-  message: "Product successfully update",
-  data: result.rows[0]
- }) 
-
-  } catch(error) {
-    next(error)
+    const result = await pool.query(
+      `UPDATE products SET name=$1, description=$2, price=$3, category=$4, image_url=$5, updated_at=CURRENT_TIMESTAMP WHERE id=$6 RETURNING *`,
+      [name, description, price, category, image_url, id]
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Sorry! Product not found",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Product successfully update, here is your updated product",
+      data: result.rows[0],
+    });
+  } catch (error) {
+    next(error);
   }
-}
+};
 
 // Delete Product
 
+export const deleteProduct = async (req, res, next) => {
+   try {
+  const {id} = req.params
+  const result = await pool.query(`DELETE FROM products WHERE id=$1 RETURNING *`, [id])
+
+  if(result.rows.length) {
+    res.status(404).json({
+      success: false,
+      message: "Sorry! didn't find the about to be deleted product"
+    })
+
+    res.status(200).json({
+      success: true,
+      message: "Product successfully deleted"
+    })
+  }
+   } catch(error) {
+    next(error)
+   }
+}
