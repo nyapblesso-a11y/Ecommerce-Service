@@ -142,3 +142,4 @@ export const deleteProduct = async (req, res, next) => {
     next(error);
   }
 };
+
