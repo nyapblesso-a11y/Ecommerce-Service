@@ -2,7 +2,7 @@ import express from "express";
 import {
   createProduct,
   getProduct,
-  getAllProduct,
+  searchProduct,
   updateProducts,
   deleteProduct
 } from "../controller/products.controller.js";
@@ -74,7 +74,7 @@ router.post("/", createProduct);
  *       400:
  *         description: Invalid query parameters
  */
-router.get("/", getAllProduct);
+router.get("/", searchProduct);
 
 
 /**

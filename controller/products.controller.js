@@ -53,7 +53,7 @@ export const getProduct = async (req, res, next) => {
 };
 
 // // get all product (search + filter)
-export const getAllProduct = async (req, res, next) => {
+export const searchProduct = async (req, res, next) => {
   try {
     const { search, category } = req.query;
 
