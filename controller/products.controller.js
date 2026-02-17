@@ -110,9 +110,15 @@ export const updateProducts = async (req, res, next) => {
       data: result.rows[0],
     });
   } catch (error) {
-    next(error);
+    console.error("UPDATE ERROR:", error); 
+   res.status(500).json({
+      success: false,
+       message: error.message
+     });
   }
 };
+
+
 export const deleteProduct = async (req, res, next) => {
   try {
     const { id } = req.params;
