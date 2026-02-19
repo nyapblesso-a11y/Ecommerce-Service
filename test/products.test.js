@@ -1,18 +1,15 @@
 import request from "supertest";
-import app from "../app.js"; // Import the Express app
-import pool from "../config/db.js"; // Import DB pool
+import app from "../app.js"; 
+import pool from "../config/db.js"; 
 
 describe("Products API", () => {
   let productId;
 
-  // Cleanup before and after tests
   beforeAll(async () => {
-    // Optional: Clear test table
     await pool.query("DELETE FROM products");
   });
 
   afterAll(async () => {
-    // Close DB connection after tests
     await pool.end();
   });
 
@@ -33,7 +30,7 @@ describe("Products API", () => {
     expect(res.body.data).toHaveProperty("id");
     expect(res.body.data.name).toBe("Test Product");
 
-    productId = res.body.data.id; // Save for later tests
+    productId = res.body.data.id; 
   });
 
   // GET ALL PRODUCTS
@@ -65,7 +62,7 @@ describe("Products API", () => {
     expect(res.body.data[0].category).toBe("Electronics");
   });
 
-it("should update product price and description", async () => {
+it("should update product name, price, category, image_url and description", async () => {
   const res = await request(app)
     .put(`/product/${productId}`)
     .send({

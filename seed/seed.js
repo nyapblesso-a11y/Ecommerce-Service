@@ -23,11 +23,8 @@ const seedDatabase = async () => {
         ('Chocolate Cake', 'Rich chocolate cake slice', 5.50, 'Desserts', 'https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?q=80&w=2003&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')
       ON CONFLICT DO NOTHING;
     `);
-
-    console.log("Products table created and seeded successfully!");
     process.exit(0); 
   } catch (err) {
-    console.error(" Error seeding database:", err);
     process.exit(1);
   }
 };
