@@ -149,3 +149,22 @@ export const deleteProduct = async (req, res, next) => {
   }
 };
 
+export const getAvailableProducts = async (req, res, next) => {
+  try {
+
+    const result = await pool.query(
+      `SELECT * FROM products
+       WHERE price > 0
+       ORDER BY created_at DESC`
+    );
+
+    res.status(200).json({
+      success: true,
+      count: result.rows.length,
+      data: result.rows
+    });
+
+  } catch (error) {
+    next(error);
+  }
+};

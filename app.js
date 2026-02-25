@@ -7,12 +7,15 @@ import indexRouter  from './routes/index.js';
 import productRouter from './routes/product.js'
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./swagger/swagger.js";
-
+import cors from "cors"
 
 
 
 const app = express();
 
+app.use(cors({
+  
+}))
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

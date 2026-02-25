@@ -4,7 +4,8 @@ import {
   getProduct,
   searchProduct,
   updateProducts,
-  deleteProduct
+  deleteProduct,
+  getAvailableProducts
 } from "../controller/products.controller.js";
 
 const router = express.Router();
@@ -76,6 +77,7 @@ router.post("/", createProduct);
  */
 router.get("/", searchProduct);
 
+router.get("/available", getAvailableProducts)
 
 /**
  * @swagger
@@ -156,5 +158,7 @@ router.put("/:id", updateProducts);
  *         description: Product not found
  */
 router.delete("/:id", deleteProduct);
+
+
 
 export default router;
