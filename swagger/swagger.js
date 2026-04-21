@@ -11,6 +11,11 @@ const options = {
     servers: [
       {
         url: "http://localhost:4040",
+        description: "Local server"
+      },
+      {
+        url: "https://ecommerce-service-h7mh.onrender.com",
+        description: "Production server"
       }
     ]
   },
